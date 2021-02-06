@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receiving payload</title>
+</head>
+<body>
+   <h2>ทดสอบการรับ Payload จาก Hardware</h2>
+   <p id="payload"></p>
+
+   <script>
+       window.onload = function() {
+           setInterval(() => {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "payloads.txt";
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseText != '') {
+                        var myArr = JSON.parse(this.responseText);
+                        var displayText = "";
+
+                        for(data of myArr) {
+                            dataText = data.datetime + "  ====>  " + data.payload + "\n";
+                            displayText += dataText;
+                        }
+
+                        document.getElementById("payload").innerText = displayText;
+                    } else {
+                        document.getElementById("payload").innerText = "ไม่มี payload";
+                    }
+                }
+            };
+
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+           }, 1000);
+       }
+   </script>
+</body>
+</html>
